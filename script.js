@@ -118,12 +118,14 @@ function updateFolderName(folderId){
     console.log("title" + folderId);
     console.log(folderName);
 
-    if(!folderName.textContent){
+    if(folderName.textContent == ""){
         folders.splice(folderId, 1);
+
     } else if(folderName) {
         folders[folderId] = folderName.textContent;
     }
     updateSavedFolders();
+    createFoldersDOM();
 }
 
 
