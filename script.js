@@ -10,6 +10,9 @@ const folderNameEl = document.getElementById('folder-name');
 const folderExistsErrorMessage = document.getElementById('folder-exists-error');
 const noFolderNameErrorMessage = document.getElementById('no-folder-name-error');
 
+let sortable = Sortable.create(bookmarkColumns);
+
+
 // https://github.com/SortableJS/Sortable
 
 let folders = [];
@@ -53,14 +56,11 @@ function saveFolder(event){
     event.preventDefault();
     const folderNameValue = folderNameEl.value;
     console.log(folderNameValue);
-    if(!folders.includes(folderNameValue) && folderNameValue != ""){
+    if(!folders.includes(folderNameValue)){
         folders.push(folderNameValue);
         folderForm.reset();
         localStorage.setItem('Folders', JSON.stringify(folders));
         createFoldersDOM();
-        //updateDOM
-    } else if(folderNameValue == ""){
-        showNoFolderNameError();
     } else {
         showFolderExistsError();
     }
@@ -90,9 +90,10 @@ function createFoldersDOM(){
         title.setAttribute('id', `title-${index}`)
         title.textContent = folder;
         title.contentEditable = true;
-        const titleId = `title-${index}`;
+        const titleId = "title-"+ index;
         console.log(titleId);
-        title.setAttribute('onfocusout', `updateFolderName(${titleId}, ${index})`);
+        title.setAttribute('onfocusout', `updateFolderName(${index})`);
+        console.log(titleId);
         const bookmarkList = document.createElement('ul');
         bookmarkList.classList.add('bookmark-list');
         header.appendChild(title);
@@ -112,15 +113,14 @@ function updateSavedFolders(){
     localStorage.setItem('Folders', JSON.stringify(folders));
 }
 
-function updateFolderName(titleId, folderId){
-    const folderName = document.getElementById(`title-${titleId}`);
-    console.log(titleId);
+function updateFolderName(folderId){
+    const folderName = document.getElementById("title-" + folderId);
+    console.log("title" + folderId);
     console.log(folderName);
-    const selectedFolder = folders[folderId];
 
     if(!folderName.textContent){
         folders.splice(folderId, 1);
-    } else {
+    } else if(folderName) {
         folders[folderId] = folderName.textContent;
     }
     updateSavedFolders();
@@ -145,7 +145,7 @@ bookmarkModalCloseIcon.addEventListener('click', closeBookmarkModal);
 addNewFolderBtn.addEventListener('click', showNewFolderModal);
 folderModalCloseIcon.addEventListener('click', closeNewFolderModal);
 folderForm.addEventListener('submit', saveFolder);
-folderNameEl.setAttribute('onfocusout', 'checkFolderErrors');
+folderNameEl.addEventListener('change', checkFolderErrors);
 
 
 
