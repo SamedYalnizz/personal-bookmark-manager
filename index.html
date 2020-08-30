@@ -8,13 +8,25 @@
     <title>Personal Bookmark Manager</title>
 </head>
 <body>
-    <div class="nav-bar">
+    
+    <div class="nav-bar" id="nav">
         <div class="add-new-btn" id="new-bookmark-btn">
-            <span id="addNewBookmark">+ New Bookmark</span>
+            + Bookmark
         </div>
         
         <div class="add-new-btn" id="new-folder-btn">
-            <span id="addNewFolder">+ New Folder</span>
+            + Folder
+        </div>
+        <!-- Dark Mode Switch -->
+        <div class="theme-switch-wrapper">
+            <span id="toggle-icon">
+                <span class="toggle-text">Light Mode</span>
+                <i class="fas fa-sun"></i>
+            </span>
+            <label class="theme-switch">
+                <input type="checkbox">
+                <div class="slider round"></div>
+            </label>
         </div>
     </div>
     
@@ -39,13 +51,10 @@
                     </div>
                     <!-- Folder -->
                     <div class="form-group">
-                        <label for="folder" class="form-label">Folder</label>
-                        <select id="folder" class="form-input" name="folder">
-                            <option value="1">To Read</option>
-                            <option value="2">Computer Science</option>
-                            <option value="3">Personal</option>
-                            <option value="4">News</option>
-                          </select>
+                        <label for="folder-selection" class="form-label">Folder</label>
+                        <select id="folder-selection" class="form-input" name="folder-selection"></select>
+                        <p class="error-message hidden" id="bookmark-exists-error">Bookmark already exists. In folder: </p>
+                        <p class="error-message hidden" id="no-bookmark-name-error">Please insert a bookmark name.</p>
                     </div>
                     <button type="submit" class="save-btn">Save</button>
                 </form>
@@ -70,7 +79,7 @@
                 </form>
             </div>
         </div>
-        <div class="bookmark-columns">
+        <div class="bookmark-columns list-group" id="listWithHandle">
             
             <!-- <div class="bookmark-column">
                 <i class="fas fa-times close-icon" id="delete-folder-icon"></i>
@@ -79,9 +88,9 @@
                 </div>
                 <ul class="bookmark-list">
                     <li class="bookmark-item">
-                        <span class="bookmark-name">CS: </span> <span class="bookmark-link">
+                        <div class="bookmark-name">CS: </div> <div class="bookmark-link">
                             <a href="teachyourselfcs.com" target="_blank">teachyourselfcs</a>
-                        </span>
+                        </div>
                     </li>
                     <li class="bookmark-item">
                         <span class="bookmark-name">CS: </span> <span class="bookmark-link">

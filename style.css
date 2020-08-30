@@ -1,32 +1,140 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
 
+:root {
+    --primary-color: rgb(255, 92, 92);
+    --primary-variant: #ff2d2d;
+    --secondary-color: #1b9999;
+    --on-primary: rgb(250, 250, 250);
+    --on-secondary: rgb(250, 250, 250);
+    --on-background: rgb(66, 66, 66);
+    --on-background-alt: rgba(66, 66, 66, 0.7);
+    --background: rgb(255, 255, 255);
+    --background-secondary: whitesmoke;
+    --box-shadow: 0 5px 20px 1px rgba(0, 0, 0, 0.5);
+    --hover-background: rgba(255, 255, 255, 0.2);
+    --item-background: rgba(0, 0, 0, 0.2);
+  }
+
+  [data-theme="dark"] {
+    --primary-color: rgb(150, 65, 255);
+    --primary-variant: #6c63ff;
+    --secondary-color: #03dac5;
+    --on-primary: #000;
+    --on-secondary: rgb(250, 250, 250);
+    --on-background: rgba(255, 255, 255, 0.9);
+    --on-background-alt: rgba(255, 255, 255, 0.7);
+    --background: #121212;
+    --background-secondary: #303030;
+    --hover-background: rgba(0, 0, 0, 0.2); 
+    --item-background: rgba(255, 255, 255, 0.2);
+    --box-shadow: 0 5px 20px 1px rgba(255, 255, 255, 0.2);
+
+  }
+
+
 html{
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    background-color: whitesmoke;
+    background-color: var(--background);
+    color:  var(--on-background);
     font-family: Noto Sans JP, sans-serif;
 }
 
 
 .nav-bar {
-    background-color: white;
+    background-color: var(--background);
+    color: var(--on-background);
     width: 100%;
     display: flex;
-    height: 50px
+    height: 50px;
     position: fixed;
     justify-content: left;
     align-items: center;
+    z-index: 11;
+    padding: 10px;
+    background: rgb(255 255 255 / 50%);
 }
+/* Dark Mode Toggle */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    z-index: 100;
+    position: fixed;
+    right: 25px;
+    top: 30px;
+  }
+  
+  .theme-switch-wrapper span {
+    margin-right: 10px;
+    font-size: 1rem;
+  }
+  
+  .toggle-text {
+    position: relative;
+    top: -4px;
+    right: 5px;
+    color: var(--on-background);
+  }
+  
+  .theme-switch {
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+  }
+  
+  .theme-switch input {
+    display: none;
+  }
+  
+  .slider {
+    background: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: 0.4s;
+  }
+  
+  .slider::before {
+    background: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: 0.4s;
+    width: 26px;
+  }
+  
+  input:checked + .slider {
+    background: var(--primary-color);
+  }
+  
+  input:checked + .slider::before {
+    transform: translateX(26px);
+  }
+  
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round::before {
+    border-radius: 50%;
+  }
 
 .add-new-btn{
     cursor: pointer;
     border: none;
-    background: yellow;
+    color: var(--on-secondary);
+    background: var(--secondary-color);
     border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+    box-shadow: var(--box-shadow);
     padding: 10px;
 
 }
@@ -45,18 +153,20 @@ body {
 
 
 .bookmark-modal {
-    background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    background-color: var(--background); 
+    box-shadow: var(--box-shadow);
     max-width: 95%;
     width: 250px;
     z-index: 110;
     position: fixed;
     margin-left: 10px;
+    border-radius: 5px;
 }
 
 .modal-header {
     padding: 5px;
-    background-color: greenyellow;
+    background-color: var(--primary-color);
+    border-radius: 5px 5px 0 0 ;
 }
 .modal-header h3 {
     display: flex;
@@ -88,8 +198,8 @@ body {
 
 .save-btn {
     cursor: pointer;
-    color: white;
-    background: orange;
+    color: var(--on-secondary);
+    background: var(--secondary-color);
     height: 30px;
     width: 97%;
     border: none;
@@ -104,6 +214,10 @@ body {
     color: red;
 }
 
+.bookmark-container{
+    padding-top: 70px;
+}
+
 .bookmark-columns {
     display: flex;
     align-items: flex-start;
@@ -111,7 +225,7 @@ body {
 }
 
 .header {
-    background: tomato;
+    background: var(--primary-color);
     padding: 5px;
     top: 0;
 }
@@ -130,9 +244,9 @@ body {
     margin: 10px 10px;
     position: relative;
     height: 300px;
-    background-color: tan;
+    background-color: var(--background-secondary);
     border-radius: 10px;
-    box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.2);
+    box-shadow: var(--box-shadow);
     overflow-x: hidden;
 
 }
@@ -141,10 +255,25 @@ body {
     z-index: 10;
 }
 
+.bookmark-move-icon{
+    display: none;
+}
+
+
+.fa-arrows-alt{
+    float: left;
+    padding: 10px;
+    cursor: move;
+}
+
+
+
+
 [contenteditable="true"]:active,
 [contenteditable="true"]:focus{
   border:none;
   outline:none;
+  background: var(--hover-background);
 }
 
 
@@ -153,15 +282,58 @@ body {
     margin: 0;
     margin-top: 10px;
     padding: 0;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
 }
+
+
+
 
 .bookmark-item{
     margin: 10px;
     padding: 10px; 
-    background: rgba(0,0,0,0.1);
     line-height: 1.5rem;
     height: fit-content;
     border-radius: 10px;
+    background: var(--item-background);
+    flex: 1 0 21%;
+    align-items: center;
+}
+
+.bookmark-link{
+    display: flex;
+}
+
+.edit-icon {
+    display:none;
+    margin-left: 5px;
+    cursor: pointer;
+    float: right;
+    vertical-align: bottom;
+}
+
+.bookmark-item:hover .edit-icon{
+    display: flex;
+}
+
+.bookmark-item:hover .delete-bookmark-icon{
+    display: flex;
+}
+
+.bookmark-item:hover .bookmark-move-icon{
+    display: flex;
+}
+
+.bookmark-name{
+    margin-right: 20px;
+    margin-bottom: 5px;
+}
+
+.delete-bookmark-icon{
+    display: none;
+    float:right;
+    font-size: 15px;
 }
 
 
@@ -178,5 +350,7 @@ body {
     .bookmark-column {
         margin: 10px;
     }
-
+    .toggle-text{
+        display:none;
+    }
 }
