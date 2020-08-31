@@ -24,7 +24,7 @@ const toggleSwitch = document.querySelector('input[type="checkbox"]');
 const toggleIcon = document.getElementById('toggle-icon');
 const nav = document.getElementById('nav');
 
-
+let folders = [];
 
 
 // https://github.com/SortableJS/Sortable
@@ -49,30 +49,21 @@ function addSortableFunctionality(folderIndex){
         onEnd: function(evt){
             const oldBookmarkIndex = evt.oldIndex;
             const oldFolderIndex = evt.from.id.slice(14);
-            const newBookmarkIndex = evt.newIndex; // new bookmarkIndex; 
-            const newFolderIndex = evt.to.id.slice(14); // new folderIndex
-            // delete old bookmark from old folder
-            // add new bookmark to new folder
+            const newBookmarkIndex = evt.newIndex; 
+            const newFolderIndex = evt.to.id.slice(14); 
             const tempBookmark = folders[oldFolderIndex].bookmarks[oldBookmarkIndex];
             folders[oldFolderIndex].bookmarks.splice(oldBookmarkIndex, 1);
             folders[newFolderIndex].bookmarks.splice(newBookmarkIndex, 0, tempBookmark);
             updateSavedFolders();
         }
-   })
+    });
 }
 
-
-
-let folders = [];
-
 function closeModals(event){
-    // Bug
     if(!bookmarkModal.classList.contains('hidden')){
-        if(event.target.closest){
-            if(event.target.closest("div > div").parentElement != bookmarkModal &&event.target != bookmarkModal && event.target != addNewBookmarkBtn){
-            closeBookmarkModal();
-            }
-        } 
+        if(event.target.closest("div > div").parentElement != bookmarkModal &&event.target != bookmarkModal && event.target != addNewBookmarkBtn){
+        closeBookmarkModal();
+        }
     } 
     else if(!folderModal.classList.contains('hidden')){
         if(event.target.closest("div > div").parentElement != folderModal && event.target != folderModal && event.target != addNewFolderBtn){
@@ -122,23 +113,6 @@ function checkBookmarkError(){
         showNoBookmarkNameError();
     }
 }
-// function checkFolderErrors(){
-//     const folderNameValue = folderNameEl.value;
-//     let folderExists = false;
-//     folders.forEach((folder) =>{
-//         if(folder.name == folderNameValue){
-//             folderExists = true;
-//         }
-//     });
-//     if(folderExists && folderNameValue != ""){
-//         showFolderExistsError();
-//     }
-//     else if(!folders.includes(folderNameValue) && folderNameValue == ""){
-//         showNoFolderNameError();
-//     } else {
-//         folderExistsErrorMessage.classList.add('hidden');
-//     }
-// }
 
 function showNewBookmarkModal() {
     bookmarkModal.classList.remove('hidden');
@@ -150,9 +124,7 @@ function closeBookmarkModal(){
 }
 
 function updateFolderSelectionDropDown(){
-    // Iterate through all folders 
-        // create option elements
-    selectFolderDropdown.textContent ="";
+    selectFolderDropdown.textContent = "";
     folders.forEach((folder, index) => {
         const optionSelection = document.createElement('option');
         optionSelection.value = index;
@@ -163,7 +135,6 @@ function updateFolderSelectionDropDown(){
 
 function createNewBookmark(event){
     event.preventDefault();
-    // Get Input Fields
     const websiteName = websiteNameEl.value;
     const websiteUrl = websiteUrlEl.value;
     const folderIndex = selectFolderDropdown.options[selectFolderDropdown.selectedIndex].value;
@@ -177,7 +148,6 @@ function createNewBookmark(event){
             }
         })
     })
-    // Check error messages in a smoother way
     if(!bookmarkExists && (websiteName != "" && websiteUrl != "")){
         let bookmark = {
             name: websiteName,
@@ -193,15 +163,11 @@ function createNewBookmark(event){
 }
 
 
-
-//Continue working here
 function editBookmark(event){
     let indicesArray = event.target.id.split('-');
-    // get Element By Id
     const bookmarkUrl = document.getElementById(`Url-${indicesArray[0]}-${indicesArray[1]}`);
     bookmarkUrl.setAttribute('contentEditable', 'true');
     bookmarkUrl.focus();
-        // onfocusout, updateBookmarkName
 }
 
 function deleteBookmark(event){
@@ -280,7 +246,6 @@ function checkFolderErrors(){
 function saveFolder(event){
     event.preventDefault();
     const folderNameValue = folderNameEl.value;
-    // Check if folders[0-x].name 
     let folderExists = false;
     folders.forEach((folder) =>{
         if(folder.name == folderNameValue){
@@ -381,14 +346,11 @@ function createFoldersDOM(){
     })
 }
 function deleteFolder(event){
-    // Add Confirmation Alert
     folders.splice(event.srcElement.id, 1);
     updateSavedFolders();
     createFoldersDOM();
     updateFolderSelectionDropDown();
 }
-
-// Update Folders in DOM - Reset HTML, Filter Array, Update localStorage
 
 function updateSavedFolders(){
     localStorage.setItem('Folders', JSON.stringify(folders));
@@ -460,42 +422,38 @@ function fetchFolders(){
 
 function darkMode() {
     nav.style.backgroundColor = 'rgb(0 0 0 / 50%)';
-    //textBox.style.backgroundColor = 'rgb(255 255 255 / 50%)';
     toggleIcon.children[0].textContent = 'Dark Mode';
     toggleIcon.children[1].classList.replace('fa-sun', 'fa-moon');
   }
   
-  // Light Mode Styles
-  function lightMode() {
-    nav.style.backgroundColor = 'rgb(255 255 255 / 50%)';
-    //textBox.style.backgroundColor = 'rgb(0 0 0 / 50%)';
-    toggleIcon.children[0].textContent = 'Light Mode';
-    toggleIcon.children[1].classList.replace('fa-moon', 'fa-sun');
-  }
+function lightMode() {
+nav.style.backgroundColor = 'rgb(255 255 255 / 50%)';
+toggleIcon.children[0].textContent = 'Light Mode';
+toggleIcon.children[1].classList.replace('fa-moon', 'fa-sun');
+}
 
-  // Switch Theme Dynamically
-  function switchTheme(event) {
+function switchTheme(event) {
     if (event.target.checked) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
-      darkMode();
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        darkMode();
     } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-      localStorage.setItem('theme', 'light');
-      lightMode();
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        lightMode();
     }
-  }
-
-const currentTheme = localStorage.getItem('theme');
-if (currentTheme) {
-document.documentElement.setAttribute('data-theme', currentTheme);
-
-if (currentTheme === 'dark') {
-    toggleSwitch.checked = true;
-    darkMode();
-}
 }
 
+function loadCurrentTheme(){
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme) {
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        if (currentTheme === 'dark') {
+            toggleSwitch.checked = true;
+            darkMode();
+        }
+    }
+}
 
 //Event Listeners
 window.addEventListener('click', closeModals);
@@ -504,19 +462,15 @@ bookmarkModalCloseIcon.addEventListener('click', closeBookmarkModal);
 bookmarkForm.addEventListener('submit', createNewBookmark);
 websiteNameEl.addEventListener('change', checkBookmarkError);
 websiteUrlEl.addEventListener('change', checkBookmarkError);
-
-
 addNewFolderBtn.addEventListener('click', showNewFolderModal);
 folderModalCloseIcon.addEventListener('click', closeNewFolderModal);
 folderForm.addEventListener('submit', saveFolder);
 folderNameEl.addEventListener('change', checkFolderErrors);
-
 toggleSwitch.addEventListener('change', switchTheme);
-
-
-
-
-
 
 // On Load
 fetchFolders();
+loadCurrentTheme();
+
+
+
